@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 属性文件 -->
+    <property name="processName" value="zwl"/>
+    <property name="logDir" value="./logs/"/>
+
+    <!-- 默认的控制台日志输出，一般生产环境都是后台启动，这个没太大作用 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 配置文件轮转 -->
+    <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<Encoding>UTF-8</Encoding>-->
+        <File>${logDir}/zwl.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logDir}/history/zwl.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 修改其他包的日志输出级别 -->
+    <logger name="org.apache">
+        <level value="ERROR"/>
+    </logger>
+
+    <!-- root 默认日志配置 ， 注意这里的级别哈！小心生产环境用DEBUG，压爆你的磁盘！-->
+    <root level="INFO">
+        <appender-ref ref="logfile"/>
+        <appender-ref ref="stdout"/>
+    </root>
+
+    <jmxConfigurator/>
+</configuration>
